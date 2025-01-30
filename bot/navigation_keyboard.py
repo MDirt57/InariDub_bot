@@ -3,11 +3,12 @@ from telegram.ext import ContextTypes
 import random
 import inject
 from database.title_repository import TitleRepository
+from bot.message_manager import MessageManager
 
 menu_keyboard = [
     [
-        InlineKeyboardButton("Тайтли", callback_data="titles"),
-        InlineKeyboardButton("Випадкове число від 1 до 6", callback_data="random")
+        InlineKeyboardButton("Моя нора", callback_data="myprofile"),
+        InlineKeyboardButton("Пошук тайтлів", switch_inline_query_current_chat="t:")
     ],
     [
         InlineKeyboardButton("List Test", callback_data="list_test"),
@@ -28,5 +29,9 @@ async def keyboard_tree(update: Update, context: ContextTypes.DEFAULT_TYPE, repo
     if query.data == "titles":
         await query.edit_message_caption(caption=str([title.name for title in repository.get_all_titles()[:5]]),
                                          reply_markup=menu)
+    elif query.data == "main":
+        await MessageManager.delete_interface(context)
+
+        await MessageManager.return_main(update, context)
     else:
         await query.edit_message_caption(caption=str(random.randint(1, 6)), reply_markup=menu)

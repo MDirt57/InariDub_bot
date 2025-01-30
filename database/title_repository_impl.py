@@ -11,3 +11,5 @@ class TitleRepositoryImpl(TitleRepository):
     def get_all_titles(self):
         return self.session.query(Titles).all()
 
+    def get_full_info(self, full_name):
+        return self.session.query(Titles).where(Titles.full_name == full_name)[0]
