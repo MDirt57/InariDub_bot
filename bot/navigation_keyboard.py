@@ -1,4 +1,4 @@
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, InputMediaVideo
 from telegram.ext import ContextTypes
 import random
 import inject
@@ -21,17 +21,4 @@ menu_keyboard = [
 menu = InlineKeyboardMarkup(menu_keyboard)
 
 
-@inject.params(repository=TitleRepository)
-async def keyboard_tree(update: Update, context: ContextTypes.DEFAULT_TYPE, repository: TitleRepository):
-    query = update.callback_query
-    await query.answer()
 
-    if query.data == "titles":
-        await query.edit_message_caption(caption=str([title.name for title in repository.get_all_titles()[:5]]),
-                                         reply_markup=menu)
-    elif query.data == "main":
-        await MessageManager.delete_interface(context)
-
-        await MessageManager.return_main(update, context)
-    else:
-        await query.edit_message_caption(caption=str(random.randint(1, 6)), reply_markup=menu)

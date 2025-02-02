@@ -6,10 +6,10 @@ class TitleRepository(ABC):
     def get_all_titles(self):
         pass
 
-    # @abstractmethod
-    # def get_video(self):
-    #     pass
+    @abstractmethod
+    def get_title_info(self, title_id):
+        pass
 
     @abstractmethod
-    def get_full_info(self, full_name):
+    def get_episode(self, title_id, episode_number):
         pass

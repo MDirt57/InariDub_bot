@@ -21,7 +21,7 @@ async def title_list(update: Update, context: ContextTypes.DEFAULT_TYPE, reposit
             description="Немає",
             title=f"{title.name} ({title.series_count})",
             thumbnail_url="https://cdn.myanimelist.net/images/anime/1344/131301.jpg",
-            input_message_content=InputTextMessageContent(f"/t {title.full_name}"),
+            input_message_content=InputTextMessageContent(f"/t {title.id}"),
         ) for title in all_titles
     ]
 
