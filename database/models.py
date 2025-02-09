@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, BigInteger, ARRAY, JSON, Boolean
+from sqlalchemy import Column, Integer, String, BigInteger, ARRAY, JSON, Boolean, SmallInteger
 from database import Base
 from dataclasses import dataclass
 
@@ -30,3 +30,6 @@ class Series(Base):
     description = Column(String(255))
     title_id = Column(BigInteger)
     source_message_id = Column(BigInteger)
+    episode_number = Column(SmallInteger)
+    bot_json = Column(JSON)
+    bot_video_id = Column(String(255))

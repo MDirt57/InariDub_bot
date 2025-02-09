@@ -27,3 +27,29 @@ async def title_list(update: Update, context: ContextTypes.DEFAULT_TYPE, reposit
 
     await update.inline_query.answer(results)
 
+@inject.params(repository=TitleRepository)
+async def title_list(update: Update, context: ContextTypes.DEFAULT_TYPE, repository: TitleRepository):
+    query = update.inline_query.query
+    all_titles = []
+
+    if query != "d:" and query != "s:":
+        return
+
+    if query == "d:":
+        all_titles = repository.get_dub_titles()
+    if query == "s:":
+        all_titles = repository.get_sub_titles()
+
+    results = [
+        InlineQueryResultArticle(
+            id=str(title.id),
+            url=title.mal_link,
+            description="Немає",
+            title=f"{title.name} ({episode_count})",
+            thumbnail_url="https://cdn.myanimelist.net/images/anime/1344/131301.jpg",
+            input_message_content=InputTextMessageContent(f"/{query[0]} {title.id}"),
+        ) for title, episode_count in all_titles
+    ]
+
+    await update.inline_query.answer(results)
+

@@ -8,9 +8,7 @@ from bot import title_list
 from bot.message_manager import MessageManager
 from database import di
 from bot import player
-from bot.channel_handler import handle_channel_post
 from bot.keyboard_tree import keyboard_tree
-
 
 load_dotenv()
 
@@ -32,8 +30,10 @@ if __name__ == '__main__':
 
     application.add_handler(CommandHandler("start", start))
     # application.add_handler(CommandHandler("s", player.send_video))
-    application.add_handler(CommandHandler("t", player.send_video))
-    application.add_handler(MessageHandler(filters.ALL, handle_channel_post))
+    application.add_handler(CommandHandler("d", player.send_video))
+    application.add_handler(CommandHandler("s", player.send_video))
+    # application.add_handler(CommandHandler("gg", write_episode))
+
     # application.add_handler(MessageHandler(filters.ALL, info))
 
     # application.add_handler(CommandHandler("title", title))

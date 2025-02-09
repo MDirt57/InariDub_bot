@@ -4,8 +4,8 @@ import random
 import inject
 from database.title_repository import TitleRepository
 from bot.message_manager import MessageManager
-from bot.navigation_keyboard import menu
-from bot.player import get_episode_info, player_keyboard
+from bot.navigation_keyboard import menu, sub_dub
+from bot.player import player_keyboard
 
 @inject.params(repository=TitleRepository)
 async def keyboard_tree(update: Update, context: ContextTypes.DEFAULT_TYPE, repository: TitleRepository):
@@ -19,20 +19,32 @@ async def keyboard_tree(update: Update, context: ContextTypes.DEFAULT_TYPE, repo
         await MessageManager.delete_interface(context)
 
         await MessageManager.return_main(update, context)
+
+    elif query.data == "back":
+        await query.edit_message_reply_markup(reply_markup=menu)
+
+    elif query.data == "search_titles":
+        await query.edit_message_reply_markup(reply_markup=sub_dub)
+
     elif query.data.split(":")[0] == "next" or query.data.split(":")[0] == "prev":
+        episode_type = bool(query.data.split(":")[3] == "True")
         title_id = query.data.split(":")[2]
         increment = int(query.data.split(":")[1])
-        video_id, desc = await get_episode_info(update, context, repository, title_id, increment)
+        episode_number = MessageManager.get_current_episode_in_profile(context, title_id) + increment
+        episode, all_episodes_number = repository.get_episode(title_id, episode_number, episode_type)
         await query.edit_message_media(
             media=InputMediaVideo(
-                media=video_id,
-                caption=desc
+                media=episode.bot_video_id,
+                caption=episode.description,
             ),
-            reply_markup=player_keyboard(title_id, MessageManager.is_first_or_last_episode(context, title_id, repository))
+            reply_markup=player_keyboard(title_id, episode_number, all_episodes_number, episode_type)
         )
         MessageManager.add_current_episode_in_profile(context, title_id, MessageManager.get_current_episode_in_profile(context, title_id)+increment)
 
     elif query.data == "none":
+        pass
+
+    elif query.data == "test":
         pass
     else:
         pass

@@ -38,7 +38,7 @@ class MessageManager:
         try:
             return context.user_data[f"t:{title_id}"]
         except KeyError:
-            return 1
+            return 0
 
     @staticmethod
     def is_first_or_last_episode(context, title_id, repository: TitleRepository):
